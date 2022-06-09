@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class SIMPLESHOOTER_API AShooterCharacter : public ACharacter
 {
@@ -37,5 +40,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 35.f;
+
+	UPROPERTY(EditAnywhere)
+	UCameraComponent* PlayerCam;
+
+	UPROPERTY(EditAnywhere)
+	USpringArmComponent* PlayerCamSpringArmComponent;
 
 };
