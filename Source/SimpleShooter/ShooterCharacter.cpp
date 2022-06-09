@@ -30,5 +30,13 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis(TEXT("MoveForward"),this,&AShooterCharacter::MoveForward);
+
 }
+
+void AShooterCharacter::MoveForward(float AxisValue)
+{
+	AddMovementInput(GetActorForwardVector()* AxisValue);
+}
+
 
