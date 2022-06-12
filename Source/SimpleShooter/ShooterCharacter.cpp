@@ -3,8 +3,11 @@
 
 #include "ShooterCharacter.h"
 
+#include "Gun.h"
 #include "Camera/CameraComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Windows/LiveCodingServer/Public/ILiveCodingServer.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -16,13 +19,22 @@ AShooterCharacter::AShooterCharacter()
 	PlayerCamSpringArmComponent->SetupAttachment(RootComponent);
 	PlayerCam = CreateDefaultSubobject<UCameraComponent>("Player Cam");
 	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);
-
+	
 }
 
 // Called when the game starts or when spawned
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	GetMesh()->HideBoneByName(TEXT("weapon_r"),EPhysBodyOp::PBO_None);
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	
+	if(Gun)
+	{
+		Gun->AttachToComponent(GetMesh(),FAttachmentTransformRules::KeepRelativeTransform,TEXT("WeaponSocket"));
+		Gun->SetOwner(this);
+	}
 	
 }
 
