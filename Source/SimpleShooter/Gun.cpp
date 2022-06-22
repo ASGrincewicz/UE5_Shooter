@@ -3,6 +3,9 @@
 
 #include "Gun.h"
 
+#include <concrt.h>
+
+#include "EnvironmentQuery/EnvQueryTypes.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -35,6 +38,27 @@ void AGun::Tick(float DeltaTime)
 void AGun::PullTrigger()
 {
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash,Mesh,TEXT("MuzzleFlashSocket"));
+	//Use the Pawn class rather than the ShootCharacter so any Pawn could potentially own the gun.
+	//If the gun is limited to Characters, use the ShootCharacter.
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if(OwnerPawn == nullptr) return;
+	AController* OwnerController = OwnerPawn->GetController();
+	if(OwnerController == nullptr) return;
+	FVector ViewPointLocation;
+	FRotator ViewPointRotaion;
+	OwnerController->GetPlayerViewPoint(ViewPointLocation,ViewPointRotaion);
+	
+	FVector End = ViewPointLocation + ViewPointRotaion.Vector() * MaxRange;
+	
+	FHitResult Hit;
+	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit,ViewPointLocation,End,ECollisionChannel::ECC_GameTraceChannel1);
+	if(bSuccess)
+	{
+		DrawDebugPoint(GetWorld(), Hit.Location, 20, FColor::Red, true);
+	}
+
+
+	//DrawDebugCamera(GetWorld(), ViewPointLocation, ViewPointRotaion,90,2,FColor::Red,true);
 }
 
 
