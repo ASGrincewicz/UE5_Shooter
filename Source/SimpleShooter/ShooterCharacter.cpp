@@ -18,8 +18,7 @@ AShooterCharacter::AShooterCharacter()
 	PlayerCamSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	PlayerCamSpringArmComponent->SetupAttachment(RootComponent);
 	PlayerCam = CreateDefaultSubobject<UCameraComponent>("Player Cam");
-	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);
-	
+	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);	
 }
 
 // Called when the game starts or when spawned
@@ -34,8 +33,7 @@ void AShooterCharacter::BeginPlay()
 	{
 		Gun->AttachToComponent(GetMesh(),FAttachmentTransformRules::KeepRelativeTransform,TEXT("WeaponSocket"));
 		Gun->SetOwner(this);
-	}
-	
+	}	
 }
 
 // Called every frame
@@ -56,6 +54,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("LookRight"),this,&AShooterCharacter::LookRight);
 	PlayerInputComponent->BindAxis(TEXT("LookUpRate"),this,&AShooterCharacter::LookUpRate);
 	PlayerInputComponent->BindAction(TEXT("Jump"),EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Shoot"),EInputEvent::IE_Pressed,this, &AShooterCharacter::Shoot);
 }
 
 void AShooterCharacter::MoveForward(float AxisValue)
@@ -88,6 +87,12 @@ void AShooterCharacter::LookRightRate(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
+
+void AShooterCharacter::Shoot()
+{
+	Gun->PullTrigger();
+}
+
 
 
 
