@@ -7,7 +7,6 @@
 #include "Camera/CameraComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Windows/LiveCodingServer/Public/ILiveCodingServer.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -15,10 +14,12 @@ AShooterCharacter::AShooterCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	
 	PlayerCamSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	PlayerCamSpringArmComponent->SetupAttachment(RootComponent);
 	PlayerCam = CreateDefaultSubobject<UCameraComponent>("Player Cam");
-	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);	
+	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);
+	
 }
 
 // Called when the game starts or when spawned
