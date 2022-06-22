@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Gun.h"
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
+class AGun;
 
 UCLASS()
 class SIMPLESHOOTER_API AShooterCharacter : public ACharacter
@@ -37,6 +39,7 @@ private:
 	void LookRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
+	void Shoot();
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 35.f;
@@ -47,4 +50,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	USpringArmComponent* PlayerCamSpringArmComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Gun")
+	TSubclassOf<AGun> GunClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	AGun* Gun;
 };

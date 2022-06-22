@@ -3,8 +3,11 @@
 
 #include "ShooterCharacter.h"
 
+#include "Gun.h"
 #include "Camera/CameraComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Windows/LiveCodingServer/Public/ILiveCodingServer.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -15,8 +18,7 @@ AShooterCharacter::AShooterCharacter()
 	PlayerCamSpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	PlayerCamSpringArmComponent->SetupAttachment(RootComponent);
 	PlayerCam = CreateDefaultSubobject<UCameraComponent>("Player Cam");
-	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);
-
+	PlayerCam->SetupAttachment(PlayerCamSpringArmComponent);	
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +26,14 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	GetMesh()->HideBoneByName(TEXT("weapon_r"),EPhysBodyOp::PBO_None);
+	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+	
+	if(Gun)
+	{
+		Gun->AttachToComponent(GetMesh(),FAttachmentTransformRules::KeepRelativeTransform,TEXT("WeaponSocket"));
+		Gun->SetOwner(this);
+	}	
 }
 
 // Called every frame
@@ -44,6 +54,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis(TEXT("LookRight"),this,&AShooterCharacter::LookRight);
 	PlayerInputComponent->BindAxis(TEXT("LookUpRate"),this,&AShooterCharacter::LookUpRate);
 	PlayerInputComponent->BindAction(TEXT("Jump"),EInputEvent::IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Shoot"),EInputEvent::IE_Pressed,this, &AShooterCharacter::Shoot);
 }
 
 void AShooterCharacter::MoveForward(float AxisValue)
@@ -76,6 +87,12 @@ void AShooterCharacter::LookRightRate(float AxisValue)
 {
 	AddControllerYawInput(AxisValue * RotationRate * GetWorld()->GetDeltaSeconds());
 }
+
+void AShooterCharacter::Shoot()
+{
+	Gun->PullTrigger();
+}
+
 
 
 
