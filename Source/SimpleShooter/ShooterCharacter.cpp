@@ -26,6 +26,8 @@ AShooterCharacter::AShooterCharacter()
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Health = MaxHealth;
 	
 	GetMesh()->HideBoneByName(TEXT("weapon_r"),EPhysBodyOp::PBO_None);
 	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
@@ -57,6 +59,22 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction(TEXT("Jump"),EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Shoot"),EInputEvent::IE_Pressed,this, &AShooterCharacter::Shoot);
 }
+
+float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToApply = Super::TakeDamage(DamageAmount,DamageEvent,EventInstigator,DamageCauser);
+
+	//Prevent the Health from going below 0.
+	DamageToApply = FMath::Min(Health,DamageToApply);
+
+	Health -= DamageToApply;
+
+	UE_LOG(LogTemp,Warning, TEXT("Character took %f Damage and has %f Health remaining."),DamageToApply, Health);
+
+	return DamageToApply;
+}
+
+
 
 void AShooterCharacter::MoveForward(float AxisValue)
 {
