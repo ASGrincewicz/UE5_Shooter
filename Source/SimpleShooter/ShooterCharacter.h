@@ -33,6 +33,8 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	void Shoot();
+	
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 
@@ -44,7 +46,7 @@ private:
 	void LookRight(float AxisValue);
 	void LookUpRate(float AxisValue);
 	void LookRightRate(float AxisValue);
-	void Shoot();
+	
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100.f;
