@@ -18,7 +18,6 @@ class SIMPLESHOOTER_API AKillEmAllGameMode : public ASimpleShooterGameModeBase
 public:
 	virtual void PawnKilled(APawn* PawnKilled) override;
 
-protected:
-	//APlayerController* PlayerController;
-	//virtual APlayerController* GetPlayerControllerViaCast(APawn* Pawn) override;
+private:
+	void EndGame(bool bIsPlayerWinner) const;
 };
