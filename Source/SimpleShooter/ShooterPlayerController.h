@@ -9,7 +9,7 @@
 /**
  * 
  */
-
+class UUserWidget;
 UCLASS()
 class SIMPLESHOOTER_API AShooterPlayerController : public APlayerController
 {
@@ -19,10 +19,14 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UUserWidget> LoseScreenClass;
+	TSubclassOf<UUserWidget> LoseScreenClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> WinScreenClass;
 	
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
 
 	FTimerHandle RestartTimer;
+
+	void DisplayEndGameScreen(TSubclassOf<UUserWidget> ScreenClass);
 };
