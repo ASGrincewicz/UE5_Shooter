@@ -17,7 +17,7 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	const AAIController* OwnerAI = OwnerComp.GetAIOwner();
-	const APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
+	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 	
 	if(PlayerPawn == nullptr)
 	{
@@ -30,7 +30,7 @@ void UBTService_PlayerLocationIfSeen::TickNode(UBehaviorTreeComponent& OwnerComp
 	}
 	if(OwnerAI->LineOfSightTo(PlayerPawn))
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(),PlayerPawn->GetActorLocation());
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(GetSelectedBlackboardKey(),PlayerPawn);
 	}
 	else
 	{
