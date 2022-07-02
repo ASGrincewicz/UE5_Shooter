@@ -8,30 +8,41 @@
 void AShooterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	DisplayScreenUI(HUDClass);
+	HUD = CreateWidget(this,HUDClass);
+	if(HUD != nullptr)
+	{
+		HUD->AddToViewport();
+	}	
 }
 
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
 
+	//Removes Player HUD from view
+	HUD->RemoveFromViewport();
+
 	if(bIsWinner)
 	{
 		//Display Win Screen
-		DisplayScreenUI(WinScreenClass);
+		DisplayScreenUI(WinScreenClass,true);
 	}
 	else
 	{
 		//Display Lose Screen
-		DisplayScreenUI(LoseScreenClass);
+		DisplayScreenUI(LoseScreenClass,true);
 	}
 	GetWorldTimerManager().SetTimer(RestartTimer,this,&APlayerController::RestartLevel,RestartDelay);
 }
-void AShooterPlayerController::DisplayScreenUI(TSubclassOf<UUserWidget> ScreenClass)
+void AShooterPlayerController::DisplayScreenUI(TSubclassOf<UUserWidget> ScreenClass, bool ShowUI)
 {
 	UUserWidget* Screen = CreateWidget(this,ScreenClass);
-	if(Screen != nullptr)
+	if(Screen != nullptr && ShowUI == true)
 	{
 		Screen->AddToViewport();
+	}
+	else if(Screen != nullptr && ShowUI == false)
+	{
+		Screen->RemoveFromViewport();
 	}
 }

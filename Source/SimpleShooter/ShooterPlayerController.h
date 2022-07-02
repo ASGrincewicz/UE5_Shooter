@@ -27,11 +27,14 @@ private:
 	TSubclassOf<UUserWidget> LoseScreenClass;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> WinScreenClass;
+
+	UPROPERTY()
+	UUserWidget* HUD;
 	
 	UPROPERTY(EditAnywhere)
 	float RestartDelay = 5.f;
 
 	FTimerHandle RestartTimer;
 
-	void DisplayScreenUI(TSubclassOf<UUserWidget> ScreenClass);
+	void DisplayScreenUI(TSubclassOf<UUserWidget> ScreenClass, bool ShowUI);
 };
