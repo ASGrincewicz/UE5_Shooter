@@ -17,7 +17,12 @@ class SIMPLESHOOTER_API AShooterPlayerController : public APlayerController
 public:
 	virtual void GameHasEnded(AActor* EndGameFocus, bool bIsWinner) override;
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> HUDClass;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> LoseScreenClass;
 	UPROPERTY(EditAnywhere)
@@ -28,5 +33,5 @@ private:
 
 	FTimerHandle RestartTimer;
 
-	void DisplayEndGameScreen(TSubclassOf<UUserWidget> ScreenClass);
+	void DisplayScreenUI(TSubclassOf<UUserWidget> ScreenClass);
 };

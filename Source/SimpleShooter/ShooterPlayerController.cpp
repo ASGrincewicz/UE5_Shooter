@@ -5,6 +5,12 @@
 
 #include "Blueprint/UserWidget.h"
 
+void AShooterPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+	DisplayScreenUI(HUDClass);
+}
+
 void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner)
 {
 	Super::GameHasEnded(EndGameFocus, bIsWinner);
@@ -12,17 +18,16 @@ void AShooterPlayerController::GameHasEnded(AActor* EndGameFocus, bool bIsWinner
 	if(bIsWinner)
 	{
 		//Display Win Screen
-		DisplayEndGameScreen(WinScreenClass);
+		DisplayScreenUI(WinScreenClass);
 	}
 	else
 	{
 		//Display Lose Screen
-		DisplayEndGameScreen(LoseScreenClass);
+		DisplayScreenUI(LoseScreenClass);
 	}
 	GetWorldTimerManager().SetTimer(RestartTimer,this,&APlayerController::RestartLevel,RestartDelay);
 }
-
-void AShooterPlayerController::DisplayEndGameScreen(TSubclassOf<UUserWidget> ScreenClass)
+void AShooterPlayerController::DisplayScreenUI(TSubclassOf<UUserWidget> ScreenClass)
 {
 	UUserWidget* Screen = CreateWidget(this,ScreenClass);
 	if(Screen != nullptr)
